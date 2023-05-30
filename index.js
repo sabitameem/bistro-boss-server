@@ -1,6 +1,7 @@
 const express = require('express');
 const app =express();
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 require('dotenv').config();
 
@@ -32,7 +33,16 @@ async function run() {
     const reviewsCollection =client.db("bistroDb").collection("reviews");
     const cartCollection =client.db("bistroDb").collection("carts");
     
-    
+    //token created
+    app.post('/jwt', (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+
+      res.send({ token })
+    })
+
+
+
 
     //users
     app.get('/users', async (req, res) => {
