@@ -150,6 +150,23 @@ async function run() {
      })
 
 
+     app.get('/admin-stats',verifyJWT,verifyAdmin, async(req,res)=>{
+      const users = await usersCollection.estimatedDocumentCount();
+      const products = await menuCollection.estimatedDocumentCount();
+      const orders = await paymentCollection.estimatedDocumentCount();
+      const payments = await paymentCollection.find().toArray();
+      const revenue = payments.reduce( ( sum, payment) => sum + payment.price, 0)
+
+
+      res.send({
+        revenue,
+        users,
+        products,
+        orders
+      })
+     })
+
+
 
 
     //menu data
